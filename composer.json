@@ -15,6 +15,9 @@
 	"require": {
 		"php": ">=5.4.0"
 	},
+	"require-dev": {
+		"nette/tester": "*"
+	},
 	"autoload": {
 		"psr-0": {"Bazo": "src/"}
 	}
