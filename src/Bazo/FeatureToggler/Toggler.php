@@ -86,27 +86,28 @@ class Toggler
 
 	private function evaluateCondition($condition, $context)
 	{
-		$value = $context[$condition['field']];
+		$value	 = $context[$condition['field']];
+		$arg	 = isset($condition['arg']) ? $condition['arg'] : NULL;
 
 		switch ($condition['operator']) {
 			case self::OPERATOR_EQUALS:
-				$res = $value === $condition['arg'];
+				$res = $value === $arg;
 				break;
 
 			case self::OPERATOR_INSET:
-				$res = in_array($value, $condition['arg']);
+				$res = in_array($value, $arg);
 				break;
 
 			case self::OPERATOR_GREATER:
-				$res = $value > $condition['arg'];
+				$res = $value > $arg;
 				break;
 
 			case self::OPERATOR_LESS:
-				$res = $value < $condition['arg'];
+				$res = $value < $arg;
 				break;
 
 			default:
-				$res = $this->evaluateCustomOperatorCondition($condition['operator'], $value, $context);
+				$res = $this->evaluateCustomOperatorCondition($condition['operator'], $value, $context, $arg);
 				break;
 		}
 
@@ -114,14 +115,14 @@ class Toggler
 	}
 
 
-	private function evaluateCustomOperatorCondition($operatorSign, $value, $context)
+	private function evaluateCustomOperatorCondition($operatorSign, $value, $context, $arg)
 	{
 		if (!array_key_exists($operatorSign, $this->operators)) {
-			throw new UnknownOperatorException(sprintf('Operator "%s" is not registered'));
+			throw new UnknownOperatorException(sprintf('Operator "%s" is not registered', $operatorSign));
 		}
 
 		$operator = $this->operators[$operatorSign];
-		return $operator->evaluateCondition($value, $context);
+		return $operator->evaluateCondition($value, $context, $arg);
 	}
 
 

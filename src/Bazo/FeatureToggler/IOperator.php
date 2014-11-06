@@ -8,6 +8,16 @@ namespace Bazo\FeatureToggler;
  */
 interface IOperator
 {
+
+	/**
+	 * @return string
+	 */
 	public function getOperatorSign();
-	public function evaluateCondition($value, $context);
+
+	/**
+	 * @param mixed $value
+	 * @param array $context
+	 * @param mixed|NULL $arg
+	 */
+	public function evaluateCondition($value, array $context = [], $arg = NULL);
 }
