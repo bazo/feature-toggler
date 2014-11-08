@@ -52,9 +52,9 @@ class Toggler
 
 		$featureData = $this->features[$feature];
 
-		if (key_exists('active', $featureData)) {
+		if (array_key_exists('active', $featureData)) {
 			return $featureData['active'];
-		} elseif (key_exists('conditions', $featureData)) {
+		} elseif (array_key_exists('conditions', $featureData)) {
 			return $this->evaluateConditions($featureData['conditions'], $context);
 		}
 
