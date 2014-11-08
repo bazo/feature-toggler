@@ -86,10 +86,16 @@ class Toggler
 
 	private function evaluateCondition($condition, $context)
 	{
-		$value	 = $context[$condition['field']];
-		$arg	 = isset($condition['arg']) ? $condition['arg'] : NULL;
+		if (count($condition) === 2) {
+			list($field, $operator) = array_values($condition);
+			$arg = NULL;
+		} else {
+			list($field, $operator, $arg) = array_values($condition);
+		}
 
-		switch ($condition['operator']) {
+		$value = $context[$field];
+
+		switch ($operator) {
 			case self::OPERATOR_EQUALS:
 				$res = $value === $arg;
 				break;
@@ -107,7 +113,7 @@ class Toggler
 				break;
 
 			default:
-				$res = $this->evaluateCustomOperatorCondition($condition['operator'], $value, $context, $arg);
+				$res = $this->evaluateCustomOperatorCondition($operator, $value, $context, $arg);
 				break;
 		}
 
