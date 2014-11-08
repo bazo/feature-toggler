@@ -22,7 +22,14 @@ $context = [
 	'site' => 'sk'
 
 ];
+//using only globals
 if($toggler->enabled('feature1')) { //true
+	...
+}
+
+or
+//using globals and local context
+if($toggler->enabled('feature1', $context)) { //true
 	...
 }
 ````
@@ -38,7 +45,7 @@ $config = [
 		],
 		'feature1' => [
 			'conditions' => [
-				['field' => 'site', 'operator' => 'in', 'arg' => ['sk', 'cz']]
+				['field' => 'site', 'operator' => 'in', 'arg' => ['sk', 'cz']],
 				['field' => 'userId', 'operator' => '>', 'arg' => 140]
 		],
 		'paypal' => [
@@ -49,15 +56,20 @@ $config = [
 ];
 ````
 
+or you can use use shorthand syntax for conditions, it's much cleaner and more readable
+````
+['site', 'in', ['sk', 'cz', 'de', 'at']]
+````
+
 Operators:
 
-there's 4 built-in operators:
+there's 4 built-in operators, that cannot be overriden:
 	> - value must be greater than arg
 	< - value must be lower than arg
 	= - value must be equal than arg
 	in - value must be in set of args
 
-Then you can register custom operators. A custom operator must implement IOperator interface
+You can also register custom operators. A custom operator must implement IOperator interface
 ````
 $operator = new MyCustomOperator;
 $toggler->registerOperator($operator);
