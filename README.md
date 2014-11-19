@@ -63,11 +63,12 @@ or you can use use shorthand syntax for conditions, it's much cleaner and more r
 
 Operators:
 
-there's 4 built-in operators, that cannot be overriden:
-	> - value must be greater than arg
-	< - value must be lower than arg
-	= - value must be equal than arg
-	in - value must be in set of args
+there're 4 built-in operators, that cannot be overriden:
+
+* `>` - value must be greater than arg
+* `<` - value must be lower than arg
+* `-` - value must be equal than arg
+* `in` - value must be in set of args
 
 You can also register custom operators. A custom operator must implement IOperator interface
 ````
@@ -89,7 +90,7 @@ then you write a condition like this
 
 Custom features backend:
 
-You can also a custom backend for storing features and their conditions, for example a database
+You can also add custom backend for storing features and their conditions, for example a database
 
 The backend needs to implement **IFeaturesBackend** interface which has one method: **getConfig()**
 
