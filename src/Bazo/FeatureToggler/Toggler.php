@@ -128,7 +128,6 @@ class Toggler
 
 	private function fireCallbacks($feature, $context, $result)
 	{
-		dump($feature, $context, $result);
 		foreach ($this->onFeatureEvaluated as $callback) {
 			$callback($feature, $context, $result);
 		}
