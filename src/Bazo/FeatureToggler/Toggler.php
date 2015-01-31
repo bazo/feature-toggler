@@ -50,19 +50,19 @@ class Toggler
 		$context = array_merge($this->globals, $data);
 
 		if (!isset($this->features[$feature])) {
-			return FALSE;
-		}
-
-		$featureData = $this->features[$feature];
-
-		if (array_key_exists('active', $featureData)) {
-			$result = $featureData['active'];
-		} elseif (array_key_exists('conditions', $featureData)) {
-			$result = $this->evaluateConditions($featureData['conditions'], $context);
-		} else {
 			$result = FALSE;
-		}
+		} else {
 
+			$featureData = $this->features[$feature];
+
+			if (array_key_exists('active', $featureData)) {
+				$result = $featureData['active'];
+			} elseif (array_key_exists('conditions', $featureData)) {
+				$result = $this->evaluateConditions($featureData['conditions'], $context);
+			} else {
+				$result = FALSE;
+			}
+		}
 		$this->fireCallbacks($feature, $context, $result);
 		return $result;
 	}
@@ -128,6 +128,7 @@ class Toggler
 
 	private function fireCallbacks($feature, $context, $result)
 	{
+		dump($feature, $context, $result);
 		foreach ($this->onFeatureEvaluated as $callback) {
 			$callback($feature, $context, $result);
 		}
