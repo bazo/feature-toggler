@@ -23,6 +23,9 @@ class Toggler
 	/** @var IOperator[] */
 	private $operators = [];
 
+	/** @var array */
+	public $onFeatureEvaluated = [];
+
 	public function __construct(array $config)
 	{
 		if (isset($config['globals'])) {
@@ -53,12 +56,15 @@ class Toggler
 		$featureData = $this->features[$feature];
 
 		if (array_key_exists('active', $featureData)) {
-			return $featureData['active'];
+			$result = $featureData['active'];
 		} elseif (array_key_exists('conditions', $featureData)) {
-			return $this->evaluateConditions($featureData['conditions'], $context);
+			$result = $this->evaluateConditions($featureData['conditions'], $context);
+		} else {
+			$result = FALSE;
 		}
 
-		return FALSE;
+		$this->fireCallbacks($feature, $context, $result);
+		return $result;
 	}
 
 
@@ -73,9 +79,8 @@ class Toggler
 		}
 
 		foreach ($conditions as $condition) {
-			$res = $this->evaluateCondition($condition, $context);
-
-			if ($res === FALSE) {
+			$result = $this->evaluateCondition($condition, $context);
+			if ($result === FALSE) {
 				return FALSE;
 			}
 		}
@@ -121,6 +126,14 @@ class Toggler
 	}
 
 
+	private function fireCallbacks($feature, $context, $result)
+	{
+		foreach ($this->onFeatureEvaluated as $callback) {
+			$callback($feature, $context, $result);
+		}
+	}
+
+
 	private function evaluateCustomOperatorCondition($operatorSign, $value, $context, $arg)
 	{
 		if (!array_key_exists($operatorSign, $this->operators)) {
@@ -129,6 +142,12 @@ class Toggler
 
 		$operator = $this->operators[$operatorSign];
 		return $operator->evaluateCondition($value, $context, $arg);
+	}
+
+
+	public function getFeatures()
+	{
+		return $this->features;
 	}
 
 
