@@ -37,6 +37,14 @@ class Toggler
 	}
 
 
+	public function addGlobals(array $context)
+	{
+		$this->globals = array_merge($this->globals, $context);
+
+		return $this;
+	}
+
+
 	public function registerOperator(IOperator $operator, $customSign = NULL)
 	{
 		$sign					 = is_null($customSign) ? $operator->getOperatorSign() : $customSign;
@@ -101,7 +109,7 @@ class Toggler
 		if (!isset($context[$field])) {
 			return FALSE;
 		}
-		
+
 		$value = $context[$field];
 
 		switch ($operator) {
