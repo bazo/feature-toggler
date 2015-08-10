@@ -98,6 +98,10 @@ class Toggler
 			list($field, $operator, $arg) = array_values($condition);
 		}
 
+		if (!isset($context[$field])) {
+			return FALSE;
+		}
+		
 		$value = $context[$field];
 
 		switch ($operator) {
