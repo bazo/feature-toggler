@@ -163,4 +163,13 @@ class Toggler
 	}
 
 
+	public function exportDefinition()
+	{
+		return [
+			'globals'	 => $this->globals,
+			'features'	 => $this->features
+		];
+	}
+
+
 }
