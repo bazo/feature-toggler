@@ -9,9 +9,10 @@ namespace Bazo\FeatureToggler;
 class Toggler
 {
 
-	const OPERATOR_INSET	 = 'in';
-	const OPERATOR_EQUALS	 = '=';
-	const OPERATOR_LESS	 = '<';
+	const OPERATOR_IN_SET = 'in';
+	const OPERATOR_NOT_IN_SET = 'notIn';
+	const OPERATOR_EQUALS = '=';
+	const OPERATOR_LESS = '<';
 	const OPERATOR_GREATER = '>';
 
 	/** @var array */
@@ -47,8 +48,8 @@ class Toggler
 
 	public function registerOperator(IOperator $operator, $customSign = NULL)
 	{
-		$sign					 = is_null($customSign) ? $operator->getOperatorSign() : $customSign;
-		$this->operators[$sign]	 = $operator;
+		$sign = is_null($customSign) ? $operator->getOperatorSign() : $customSign;
+		$this->operators[$sign] = $operator;
 		return $this;
 	}
 
@@ -117,8 +118,12 @@ class Toggler
 				$res = $value === $arg;
 				break;
 
-			case self::OPERATOR_INSET:
+			case self::OPERATOR_IN_SET:
 				$res = in_array($value, $arg);
+				break;
+
+			case self::OPERATOR_NOT_IN_SET:
+				$res = !in_array($value, $arg);
 				break;
 
 			case self::OPERATOR_GREATER:
@@ -166,8 +171,8 @@ class Toggler
 	public function exportDefinition()
 	{
 		return [
-			'globals'	 => $this->globals,
-			'features'	 => $this->features
+			'globals' => $this->globals,
+			'features' => $this->features
 		];
 	}
 

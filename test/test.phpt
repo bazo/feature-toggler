@@ -26,30 +26,35 @@ class TogglerTest extends \Tester\TestCase
 {
 
 	private $config = [
-		'globals'	 => [
+		'globals' => [
 			'environment' => 'test'
 		],
-		'feature1'	 => [
+		'feature1' => [
 			'conditions' => [
 				['field' => 'environment', 'operator' => 'in', 'arg' => ['test', 'staging']],
 				['field' => 'userId', 'operator' => '>', 'arg' => 140]
 			]
 		],
-		'feature2'	 => [
+		'feature2' => [
 			'conditions' => [
 				['field' => 'environment', 'operator' => '=', 'arg' => 'test']
 			]
 		],
-		'feature3'	 => [
+		'feature3' => [
 			'conditions' => [
 				['field' => 'environment', 'operator' => 'unknown', 'arg' => 'test']
 			]
 		],
-		'feature4'	 => [
+		'feature4' => [
 			'conditions' => [
 				['field' => 'userId', 'operator' => 'custom', 'arg' => 'not mandatory']
 			]
-		]
+		],
+		'feature5' => [
+			'conditions' => [
+				['field' => 'environment', 'operator' => 'notIn', 'arg' => ['test', 'staging']],
+			]
+		],
 	];
 
 	/** @var Toggler */
@@ -86,6 +91,12 @@ class TogglerTest extends \Tester\TestCase
 
 		Assert::true($this->toggler->enabled('feature4', ['userId' => 6]));
 		Assert::false($this->toggler->enabled('feature4', ['userId' => 5]));
+	}
+
+
+	public function testFeature5()
+	{
+		Assert::true($this->toggler->enabled('feature5', ['environment' => 'production']));
 	}
 
 
